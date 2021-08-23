@@ -28,7 +28,7 @@ static inline uint8_t getASCIIRow(char c, uint8_t row);
  * @param c [in] Char to write.
  * @param offset_from_left [in] Offset size from left end.
 */
-void writeAsciiToMatrixLED(MatrixLED &matrixLED, char c, int8_t offset_from_left);
+void writeAsciiToMatrixLED(MatrixLED &matrixLED, char c, int16_t offset_from_left);
 
 /**
  * @brief Write ascii string to multiple matrixLED.
@@ -36,8 +36,9 @@ void writeAsciiToMatrixLED(MatrixLED &matrixLED, char c, int8_t offset_from_left
  * @param ledlen [in] Length of MatrixLED-Array.
  * @param string [in] Char-Array to write.
  * @param offset_from_left [in] Offset size from left end.
+ * @retval Number of used matrix panels (from left).
 */
-void writeAsciisToMatrixLEDs(MatrixLED *matrixLEDs, uint8_t ledlen, const char *string, uint8_t offset_from_left);
+size_t writeAsciisToMatrixLEDs(MatrixLED *matrixLEDs, uint8_t ledlen, const char *string, int16_t offset_from_left);
 
 
 #ifdef ARDUINO
