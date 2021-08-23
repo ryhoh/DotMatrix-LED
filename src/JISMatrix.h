@@ -36,9 +36,10 @@ size_t writeJISToMatrixLED(MatrixLED &matrixLED, const char *c, int16_t offset_f
  * @param ledlen [in] Length of MatrixLED-Array.
  * @param string [in] Char-Array to write.
  * @param offset_from_left [in] Offset size from left end.
+ * @retval Number of used matrix panels (from left).
  * @note Ascii char has 5px width, and JIS char has 7px. If you like monospace, you should NOT use ascii chars.
 */
-void writeJISsToMatrixLEDs(MatrixLED *matrixLEDs, uint8_t ledlen, const char *string, int16_t offset_from_left);
+size_t writeJISsToMatrixLEDs(MatrixLED *matrixLEDs, uint8_t ledlen, const char *string, int16_t offset_from_left);
 
 /* binarySearch in _UTF_CODES */
 const uint8_t *_binarySearchForJISMatrix(uint32_t target);

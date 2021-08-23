@@ -21,13 +21,24 @@ size_t writeJISToMatrixLED(MatrixLED &matrixLED, const char *c, int16_t offset_f
   return read_char_size;
 }
 
-void writeJISsToMatrixLEDs(MatrixLED *matrixLEDs, uint8_t ledlen, const char *string, int16_t offset_from_left)
+size_t writeJISsToMatrixLEDs(MatrixLED *matrixLEDs, uint8_t ledlen, const char *string, int16_t offset_from_left)
 {
   if (matrixLEDs == nullptr || string == nullptr)
-    return;
+    return 0;
 
   int16_t left_cur = offset_from_left;
   uint8_t matrix_cur = 0;
+
+  // Skipping Empty Matrix (for big `offset_from_left`)
+  for (uint8_t matrix_i = 0; matrix_i < ledlen; ++matrix_i) {
+    if (matrixLEDs[matrix_i].width <= left_cur) {
+      left_cur -= matrixLEDs[matrix_i].width;
+      ++matrix_cur;
+    } else break;
+  }
+  if (ledlen <= matrix_cur)  // matrixLED ran out
+    return ledlen;
+
   const char *p = string;
   while (*p != '\0') {
     size_t read_char_n = writeJISToMatrixLED(*(matrixLEDs + matrix_cur), p, left_cur);
@@ -43,10 +54,10 @@ void writeJISsToMatrixLEDs(MatrixLED *matrixLEDs, uint8_t ledlen, const char *st
     if (matrixLEDs->width <= left_cur) {
       // move to next matrix...
       left_cur %= (matrixLEDs + matrix_cur)->width;
-      matrix_cur++;
+      ++matrix_cur;
 
       if (ledlen <= matrix_cur)  // matrixLED ran out
-        return;
+        return ledlen;
 
       // write rest of previous char
       writeJISToMatrixLED(*(matrixLEDs + matrix_cur), p, left_cur - char_width);
@@ -54,6 +65,10 @@ void writeJISsToMatrixLEDs(MatrixLED *matrixLEDs, uint8_t ledlen, const char *st
 
     p += read_char_n;
   }
+
+  if (left_cur < 0)
+    return 0;
+  return matrix_cur + 1;  // used matrix + initial matrix
 }
 
 const uint8_t *_binarySearchForJISMatrix(uint32_t target)
