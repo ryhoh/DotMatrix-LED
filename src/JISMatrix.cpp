@@ -10,7 +10,7 @@ size_t writeJISToMatrixLED(MatrixLED &matrixLED, const char *c, int16_t offset_f
   uint8_t row = 0;
   for (uint8_t row_i = 0; row_i < height_limit; ++row_i) {
     read_char_size = getJISRow(c, &row, row_i);
-    if (-9 < left_end && left_end < 8) {
+    if (-matrixLED.width <= left_end && left_end < matrixLED.width) {
       if (left_end < 0)
         *(matrixLED.buffer + offset_from_top + row_i) |= row >> -left_end;
       else
