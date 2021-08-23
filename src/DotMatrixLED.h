@@ -11,6 +11,10 @@
 /* Devices */
 #ifndef SIMULATOR  // Can't use for simulation on terminal.
 #include "LEDControllers.h"
+
+/* Wrapper functions */
+#include "Scroll.h"
+
 #endif  /* SIMULATOR */
 
 
